@@ -6,6 +6,7 @@ from game_stats import GameeStats
 from ship import Ship
 from alien import Alien
 import  game_functions as gf    # 导入模块，指定一个别名gf
+from button import Button
 
 def run_game(): # 定义一个方法
     # 初始化游戏并创建一个屏幕对象
@@ -14,6 +15,9 @@ def run_game(): # 定义一个方法
     screen = pygame.display.set_mode(
         (ai_settings.screen_width, ai_settings.screen_height))   # 创建一个游戏窗口
     pygame.display.set_caption('Alien Invasion')
+
+    # 创建play按钮
+    play_button = Button(ai_settings, screen, 'play')
 
     # 创建一艘飞船、一个子弹编组和一个外星人编组
     ship = Ship(ai_settings, screen) # 创建一个实例
@@ -34,13 +38,13 @@ def run_game(): # 定义一个方法
 
     # 开始游戏的主循环
     while True:
-        gf.check_events(ai_settings, screen, ship, bullets) # 创建玩家的输入
+        gf.check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets) # 创建玩家的输入
 
         if stats.game_active:
             ship.update()   # 飞船的位置将在检测事件后更新屏幕前更新
             gf.update_bullets(ai_settings, screen, ship, aliens, bullets)  # 更新使用未消失的子弹的位置
             gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
-            
-        gf.update_screen(ai_settings, screen, ship, aliens, bullets)    # 更新后的位置绘制新屏幕
+
+        gf.update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button)    # 更新后的位置绘制新屏幕
 
 run_game() # 初始化游戏并开始主循环
